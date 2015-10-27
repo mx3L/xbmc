@@ -286,7 +286,6 @@ CHECK_LIBS = xbmc/addons/test/addonsTest.a \
              xbmc/video/test/videoTest.a \
              xbmc/threads/test/threadTest.a \
              xbmc/interfaces/python/test/pythonSwigTest.a \
-             xbmc/cores/AudioEngine/Sinks/test/AESinkTest.a \
              xbmc/test/xbmc-test.a
 
 ifeq (@USE_WAYLAND@,1)
