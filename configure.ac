@@ -704,13 +704,12 @@ case $host in
      use_wayland=no
      build_shared_lib=yes
      ;;
-  mips*-*-linux-gnu*)
+  mips*-*-linux-gnu*|mipsel*linux)
      ARCH="mips"
      use_arch="mips"
      use_joystick=no
-     use_gles=no
-     use_gl=yes
-     use_sdl=yes
+     use_gles=yes
+     use_x11=no
      use_wayland=no
      USE_STATIC_FFMPEG=1
      ;;
@@ -752,6 +751,20 @@ case $use_platform in
      AC_DEFINE(HAS_EGLGLES, [1], [Define if supporting EGL based GLES Framebuffer])
      USE_OMXLIB=1; AC_DEFINE([HAVE_OMXLIB],[1],["Define to 1 if OMX libs is enabled"])
      USE_MMAL=1; AC_DEFINE([HAS_MMAL],[1],["Define to 1 if MMAL libs is enabled"])
+     CFLAGS="$CFLAGS"
+     CXXFLAGS="$CXXFLAGS"
+     ;;
+  dvbbox)
+     target_platform=target_dvbbox
+     ARCH="mips"
+     use_arch="mips"
+     use_joystick=no
+     use_gles=yes
+     use_x11=no
+     use_wayland=no
+     USE_STATIC_FFMPEG=1
+     AC_DEFINE(HAS_EGLGLES, [1], [Define if supporting EGL based GLES Framebuffer])
+     USE_DVBBOX_EGL=1
      CFLAGS="$CFLAGS"
      CXXFLAGS="$CXXFLAGS"
      ;;
@@ -2601,6 +2614,8 @@ AC_SUBST(FFMPEG_LIBDIR)
 AC_SUBST(USE_STATIC_FFMPEG)
 AC_SUBST(GNUTLS_ALL_LIBS)
 AC_SUBST(VORBISENC_ALL_LIBS)
+AC_SUBST(USE_DVBBOX_EGL)
+AC_SUBST(USE_DVBBOXARM_EGL)
 AC_SUBST(USE_TOUCH_SKIN)
 AC_SUBST(USE_LIBAV_HACKS)
 AC_SUBST(PYTHON_VERSION)

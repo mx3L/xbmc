@@ -170,6 +170,14 @@ case $host in
     platform_cxxflags="$platform_cflags"
     platform_os="linux"
   ;;
+  mipsel-*-linux*)
+    use_cpu=$host_cpu
+    use_toolchain="${use_toolchain:-/usr}"
+    platform_cflags="-Os -fPIC -DPIC"
+    platform_ldflags="-Wl,-rpath-link=$prefix/$deps_dir/lib"
+    platform_cxxflags="$platform_cflags"
+    platform_os="linux"
+  ;;
   *darwin*)
     if test "x$prefix" = "xNONE"; then
       prefix=/Users/Shared/xbmc-depends
