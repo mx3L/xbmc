@@ -1367,7 +1367,7 @@ bool CPVRClients::UpdateAddons(void)
     // Please visit http://kodi.wiki/view/PVR to learn more.
     m_bNoAddonWarningDisplayed = true;
     CGUIDialogOK::ShowAndGetInput(19271, 19272);
-    CSettings::Get().SetBool("pvrmanager.enabled", false);
+    //CSettings::Get().SetBool("pvrmanager.enabled", false);
     CGUIMessage msg(GUI_MSG_UPDATE, WINDOW_SETTINGS_MYPVR, 0);
     g_windowManager.SendThreadMessage(msg, WINDOW_SETTINGS_MYPVR);
   }
