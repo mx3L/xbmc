@@ -38,6 +38,9 @@
 #endif
 #include "EGLNativeTypeAmlogic.h"
 #include "EGLWrapper.h"
+#if defined(TARGET_DVBBOX)
+  #include "EGLNativeTypeDvbBox.h"
+#endif
 
 #define CheckError() m_result = eglGetError(); if(m_result != EGL_SUCCESS) CLog::Log(LOGERROR, "EGL error in %s: %x",__FUNCTION__, m_result);
 
@@ -98,6 +101,9 @@ bool CEGLWrapper::Initialize(const std::string &implementation)
       (nativeGuess = CreateEGLNativeType<CEGLNativeTypeAmlAndroid>(implementation)) ||
       (nativeGuess = CreateEGLNativeType<CEGLNativeTypeRKAndroid>(implementation)) ||
       (nativeGuess = CreateEGLNativeType<CEGLNativeTypeAndroid>(implementation)) ||
+#endif
+#if defined(TARGET_DVBBOX) || defined(TARGET_DVBBOXARM)// oskwon
+      (nativeGuess = CreateEGLNativeType<CEGLNativeTypeDvbBox>(implementation)) ||
 #endif
 #if defined(TARGET_RASPBERRY_PI)
       (nativeGuess = CreateEGLNativeType<CEGLNativeTypeRaspberryPI>(implementation)) ||

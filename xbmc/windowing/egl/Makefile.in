@@ -33,6 +33,13 @@ SRCS+= wayland/Callback.cpp \
        wayland/XBMCSurface.cpp
 endif
 
+ifeq (@USE_DVBBOX_EGL@,1)
+SRCS+= EGLNativeTypeDvbBox.cpp
+endif
+ifeq (@USE_DVBBOXARM_EGL@,1)
+SRCS+= EGLNativeTypeDvbBox.cpp
+endif
+
 LIB = windowing_egl.a
 
 include ../../../Makefile.include
