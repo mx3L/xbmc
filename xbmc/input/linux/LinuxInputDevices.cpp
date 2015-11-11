@@ -27,6 +27,9 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
+
+#define VKEY_ENABLE (0)
+
 #include "system.h"
 #if defined(HAS_LINUX_EVENTS)
 
@@ -716,6 +719,12 @@ XBMC_Event CLinuxInputDevice::ReadEvent()
       break;
     }
 
+#if defined(TARGET_DVBBOX)
+    if (access("/tmp/playing.lock", F_OK) == 0) {
+        break;
+    }
+#endif
+
     //printf("read event readlen = %d device name %s m_fileName %s\n", readlen, m_deviceName, m_fileName.c_str());
 
     // sanity check if we realy read the event
@@ -960,6 +969,7 @@ bool CLinuxInputDevices::CheckDevice(const char *device)
   if (fd < 0)
     return false;
 
+#if !defined(TARGET_DVBBOX) && !defined(VKEY_ENABLE) // oskwon
   if (ioctl(fd, EVIOCGRAB, 1) && errno != EINVAL)
   {
     close(fd);
@@ -967,7 +977,7 @@ bool CLinuxInputDevices::CheckDevice(const char *device)
   }
 
   ioctl(fd, EVIOCGRAB, 0);
-
+#endif
   close(fd);
 
   return true;
@@ -1059,6 +1069,7 @@ bool CLinuxInputDevice::Open()
     return false;
   }
 
+#if !defined(TARGET_DVBBOX) && !defined(VKEY_ENABLE)
   /* grab device */
   ret = ioctl(fd, EVIOCGRAB, 1);
   if (ret && errno != EINVAL)
@@ -1067,6 +1078,7 @@ bool CLinuxInputDevice::Open()
     close(fd);
     return false;
   }
+#endif
 
   // Set the socket to non-blocking
   int opts = 0;
@@ -1134,7 +1146,9 @@ bool CLinuxInputDevice::Open()
 
 driver_open_device_error:
 
+#if !defined(TARGET_DVBBOX) && !defined(VKEY_ENABLE)
   ioctl(fd, EVIOCGRAB, 0);
+#endif
   if (m_vt_fd >= 0)
   {
     close(m_vt_fd);
@@ -1208,9 +1222,10 @@ bool CLinuxInputDevice::GetKeymapEntry(KeymapEntry& entry)
  */
 void CLinuxInputDevice::Close()
 {
+#if !defined(TARGET_DVBBOX) && !defined(VKEY_ENABLE)
   /* release device */
   ioctl(m_fd, EVIOCGRAB, 0);
-
+#endif
   if (m_vt_fd >= 0)
     close(m_vt_fd);
 
