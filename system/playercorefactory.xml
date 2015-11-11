@@ -8,7 +8,28 @@
     <player name="DVDPlayer" /> placeholder for MPlayer
     <player name="PAPlayer" audio="true" />
     -->
+    <!--
+    <player name="VUE2Player" type="ExternalPlayer" audio="false" video="true">
+      <filename>xbmc.helper</filename>
+      <args>-u="{1}" -o="$PPID"</args>
+      <hidexbmc>true</hidexbmc>
+      <hideconsole>true</hideconsole>
+      <warpcursor>none</warpcursor>
+    </player>
+    -->
+    <player name="E2Player" type="Enigma2Player" audio="true" video="true">
+      <filename>kodiext</filename>
+      <args>-U "{1}" -S "{3}" -P "$PPID"</args>
+      <hidexbmc>true</hidexbmc>
+      <hideconsole>true</hideconsole>
+      <warpcursor>none</warpcursor>
+    </player>
   </players>
+
+  <rules action="prepend">
+    <rule video="true" player="E2Player" />
+    <rule audio="true" player="E2Player" />
+  </rules>
 
   <rules name="system rules">
     <rule name="hdhomerun/mms/udp" protocols="hdhomerun|mms|mmsh|udp" player="DVDPlayer" />
