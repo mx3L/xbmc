@@ -260,6 +260,10 @@ KeyMap keyMap[] = {
   { 378               , XBMCK_RIGHT       }, // Green
   { 381               , XBMCK_UP          }, // Yellow
   { 366               , XBMCK_DOWN        }, // Blue
+#if defined(TARGET_DVBBOX)
+  { KEY_OK            , XBMCK_RETURN      }, // Ok
+  { KEY_EXIT          , XBMCK_ESCAPE      }, // EXIT
+#endif
   // Rii i7 Home button / wetek openelec remote (code 172)
   { KEY_HOMEPAGE      , XBMCK_HOME        },
 };
@@ -534,9 +538,18 @@ bool CLinuxInputDevice::KeyEvent(const struct input_event& levt, XBMC_Event& dev
 
     KeymapEntry entry;
     entry.code = code;
+
+
+    int keyMapValue;
+#if defined(TARGET_DVBBOX)
+    if (devt.key.keysym.mod & (XBMCKMOD_SHIFT | XBMCKMOD_CAPS)) keyMapValue = entry.shift;
+    else if (devt.key.keysym.mod & XBMCKMOD_ALT) keyMapValue = entry.alt;
+    else if (devt.key.keysym.mod & XBMCKMOD_META) keyMapValue = entry.altShift;
+    else keyMapValue = entry.base;
+    devt.key.keysym.unicode = devt.key.keysym.sym;
+#else
     if (GetKeymapEntry(entry))
     {
-      int keyMapValue;
       if (devt.key.keysym.mod & (XBMCKMOD_SHIFT | XBMCKMOD_CAPS)) keyMapValue = entry.shift;
       else if (devt.key.keysym.mod & XBMCKMOD_ALT) keyMapValue = entry.alt;
       else if (devt.key.keysym.mod & XBMCKMOD_META) keyMapValue = entry.altShift;
@@ -551,6 +564,7 @@ bool CLinuxInputDevice::KeyEvent(const struct input_event& levt, XBMC_Event& dev
         }
       }
     }
+#endif
   }
 
   return true;
