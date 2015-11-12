@@ -95,5 +95,8 @@ extern "C" int XBMC_Run(bool renderGUI)
   g_RBP.Deinitialize();
 #endif
 
+#ifdef TARGET_DVBBOX // oskwon
+  system("xbmc.helper --stop");
+#endif /*TARGET_DVBBOX*/
   return status;
 }
