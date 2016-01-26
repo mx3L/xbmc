@@ -261,6 +261,22 @@ KeyMap keyMap[] = {
   { 381               , XBMCK_UP          }, // Yellow
   { 366               , XBMCK_DOWN        }, // Blue
 #if defined(TARGET_DVBBOX)
+  { KEY_MENU          , XBMCK_MENU        }, // Menu
+  { KEY_INFO          , XBMCK_i           }, // Info
+  { KEY_SUBTITLE      , XBMCK_l           }, // Subtitle
+  { KEY_TV            , XBMCK_z           }, // TV
+  { KEY_RADIO         , XBMCK_j           }, // Radio
+  { KEY_TEXT          , XBMCK_y           }, // Teletext
+  { KEY_AUDIO         , XBMCK_o           }, // Audio
+  { KEY_VIDEO         , XBMCK_z           }, // Video
+  { KEY_RED           , XBMCK_F1          }, // Red
+  { KEY_GREEN         , XBMCK_F2          }, // Green
+  { KEY_YELLOW        , XBMCK_F3          }, // Yellow
+  { KEY_BLUE          , XBMCK_F4          }, // Blue
+  { KEY_CHANNELUP     , XBMCK_PAGEUP      }, // PageUP
+  { KEY_CHANNELDOWN   , XBMCK_PAGEDOWN    }, // PageDown
+  { KEY_NEXT          , XBMCK_MEDIA_NEXT_TRACK    }, // Next
+  { KEY_PREVIOUS      , XBMCK_MEDIA_PREV_TRACK    }, // Prev
   { KEY_OK            , XBMCK_RETURN      }, // Ok
   { KEY_EXIT          , XBMCK_ESCAPE      }, // EXIT
 #endif
