@@ -38,6 +38,7 @@
 <keymap>
   <global>
     <keyboard>
+      <z>SwitchToEnigma2</z>
       <p>Play</p>
       <q>Queue</q>
       <f>FastForward</f>

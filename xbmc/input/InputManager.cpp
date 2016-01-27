@@ -550,6 +550,16 @@ bool CInputManager::OnKey(const CKey& key)
       return true;
     }
   }
+#if defined(TARGET_DVBBOX)
+  if (StringUtils::StartsWithNoCase(action.GetName(), "SwitchToEnigma2"))
+  {
+    CLog::LogF(LOGDEBUG, "action %s [%d], switch to enigma2", action.GetName().c_str(), action.GetID());
+    if (!system("kodiext -P $PPID -E"))
+      return true;
+    else
+      return false;
+  }
+#endif
 
   g_application.ResetScreenSaver();
 
