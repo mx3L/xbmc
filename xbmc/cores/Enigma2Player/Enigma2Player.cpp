@@ -35,6 +35,7 @@
 #include "URL.h"
 #include "utils/XMLUtils.h"
 #include "utils/log.h"
+#include "utils/JSONVariantWriter.h"
 #include "cores/AudioEngine/AEFactory.h"
 #include "input/InputManager.h"
 
@@ -88,6 +89,42 @@ bool CEnigma2Player::OpenFile(const CFileItem& file, const CPlayerOptions &optio
     m_playbackStartTime = XbmcThreads::SystemClockMillis();
     m_launchFilename = file.GetPath();
     m_item = file;
+
+    if (m_filenameMeta.length() > 0)
+    {
+      CVariant variant;
+      file.Serialize(variant);
+      CVariant playerOptionsVariant;
+      playerOptionsVariant["startPercent"] = options.startpercent;
+      playerOptionsVariant["startTime"] = options.starttime;
+      variant["playerOptions"] = playerOptionsVariant;
+
+      CVariant listItemVariant;
+      listItemVariant["label"] = file.GetLabel();
+      listItemVariant["label2"] = file.GetLabel2();
+      listItemVariant["iconImage"] = file.GetIconImage();
+      variant["listItem"] = listItemVariant;
+
+      std::string jsonStr;
+      jsonStr = CJSONVariantWriter::Write(variant, false);
+      CLog::Log(LOGNOTICE, "%s json: %s", __FUNCTION__, jsonStr.c_str());
+
+      CFile file;
+      if (file.OpenForWrite(m_filenameMeta, true))
+      {
+        ssize_t ret;
+        if ((ret = file.Write(jsonStr.c_str(), jsonStr.length())) == -1)
+        {
+          CLog::Log(LOGDEBUG, "%s ex write error occurred(json)!", __FUNCTION__);
+        }
+        else if (ret != jsonStr.length())
+        {
+          CLog::Log(LOGDEBUG, "%s write error occurred(json)!", __FUNCTION__);
+        }
+        file.Close();
+      }
+    }
+
     CLog::Log(LOGNOTICE, "%s: %s", __FUNCTION__, m_launchFilename.c_str());
     
     Create();
@@ -493,6 +530,12 @@ bool CEnigma2Player::Initialize(TiXmlElement* pConfig)
     xml<<*pConfig;
     CLog::Log(LOGERROR, "ExternalPlayer Error: filename element missing from: %s", xml.c_str());
     return false;
+  }
+
+  XMLUtils::GetString(pConfig, "filenamemeta", m_filenameMeta);
+  if (m_filenameMeta.length() > 0)
+  {
+    CLog::Log(LOGNOTICE, "ExternalPlayer FilenameMeta: %s", m_filenameMeta.c_str());
   }
 
   XMLUtils::GetString(pConfig, "args", m_args);

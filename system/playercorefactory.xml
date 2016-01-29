@@ -20,6 +20,7 @@
     <player name="E2Player" type="Enigma2Player" audio="true" video="true">
       <filename>kodiext</filename>
       <args>-U "{1}" -S "{3}" -P "$PPID"</args>
+      <filenamemeta>/tmp/kodiextin.json</filenamemeta>
       <hidexbmc>true</hidexbmc>
       <hideconsole>true</hideconsole>
       <warpcursor>none</warpcursor>

@@ -23,6 +23,7 @@
 #include "cores/IPlayer.h"
 #include "threads/Thread.h"
 #include "FileItem.h"
+#include "utils/Variant.h"
 #include <string>
 #include <vector>
 
@@ -99,6 +100,8 @@ private:
   int m_xPos;
   int m_yPos;
   std::string m_filename;
+  std::string m_filenameMeta;
+
   std::string m_args;
   bool m_hideconsole;
   bool m_hidexbmc;
