@@ -36,6 +36,7 @@
 #include "utils/XMLUtils.h"
 #include "utils/log.h"
 #include "utils/JSONVariantWriter.h"
+#include "utils/JSONVariantParser.h"
 #include "cores/AudioEngine/AEFactory.h"
 #include "input/InputManager.h"
 
@@ -368,7 +369,19 @@ BOOL CEnigma2Player::ExecuteAppLinux(const char* strSwitches)
   bool remoteUsed = CInputManager::Get().IsRemoteControlEnabled();
   CInputManager::Get().DisableRemoteControl();
 
-  int ret = system(strSwitches);
+  FILE *f;
+  if ((f = popen(strSwitches, "r")) == NULL)
+  {
+    CLog::Log(LOGNOTICE, "%s: Failure popen: %s", __FUNCTION__, strerror(errno));
+    return false;
+  }
+
+  char line[1024];
+  while (fgets(line, sizeof(line), f) != NULL)
+  {
+    handleAppLinuxOutput(line);
+  }
+  int ret = pclose(f);
 
   if (remoteUsed)
     CInputManager::Get().EnableRemoteControl();
@@ -485,12 +498,7 @@ void CEnigma2Player::SeekTime(int64_t iTime)
 
 int64_t CEnigma2Player::GetTime() // in millis
 {
-  if ((XbmcThreads::SystemClockMillis() - m_playbackStartTime) / 1000 > m_playCountMinTime)
-  {
-    m_time = m_totalTime * 1000;
-  }
-
-  return m_time;
+  return (int64_t)m_time * 1000;
 }
 
 int64_t CEnigma2Player::GetTotalTime() // in milliseconds
@@ -650,5 +658,16 @@ void CEnigma2Player::GetCustomRegexpReplacers(TiXmlElement *pRootElement,
 
     pReplacer = pReplacer->NextSiblingElement("replacer");
   }
+}
+
+void CEnigma2Player::handleAppLinuxOutput(const std::string& output)
+{
+  //CLog::Log(LOGDEBUG, "%s: output: %s", __FUNCTION__, output.c_str());
+  const CVariant variantOutput = CJSONVariantParser::Parse((unsigned char*)output.c_str(), output.length());
+  if (!variantOutput["position"].isNull())
+    m_time = variantOutput["position"].asInteger(0);
+  if (!variantOutput["duration"].isNull())
+    m_totalTime = variantOutput["duration"].asInteger(0);
+  //CLog::Log(LOGDEBUG, "%s: position: %d, duration: %d", __FUNCTION__, m_time, m_totalTime);
 }
 

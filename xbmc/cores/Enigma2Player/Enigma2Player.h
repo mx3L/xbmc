@@ -85,6 +85,7 @@ public:
 
 private:
   void GetCustomRegexpReplacers(TiXmlElement *pRootElement, std::vector<std::string>& settings);
+  void handleAppLinuxOutput(const std::string& line);
   virtual void Process();
 
   bool m_bAbortRequest;
