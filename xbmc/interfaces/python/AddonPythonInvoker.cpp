@@ -49,6 +49,14 @@
         "sys.stderr = xbmcout(" MODULE ".LOGERROR)\n" \
         ""
 
+#define RUNSCRIPT_DISABLE_SSL_VERIFICATION \
+  "" \
+  "import ssl,sys\n" \
+  "if sys.version_info >= (2, 7, 9):\n" \
+  "  import ssl\n" \
+  "  ssl._create_default_https_context = ssl._create_unverified_context\n" \
+  ""
+
 #define RUNSCRIPT_SETUPTOOLS_HACK \
   "" \
   "import imp,sys\n" \
@@ -74,7 +82,7 @@
 #else
 
 #define RUNSCRIPT_COMPLIANT \
-  RUNSCRIPT_PRAMBLE RUNSCRIPT_POSTSCRIPT
+  RUNSCRIPT_PRAMBLE RUNSCRIPT_DISABLE_SSL_VERIFICATION RUNSCRIPT_POSTSCRIPT
 
 #endif
 
