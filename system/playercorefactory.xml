@@ -29,7 +29,6 @@
 
   <rules action="prepend">
     <rule video="true" player="E2Player" />
-    <rule audio="true" player="E2Player" />
   </rules>
 
   <rules name="system rules">
