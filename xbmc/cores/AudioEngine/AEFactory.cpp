@@ -39,9 +39,6 @@ IAE *CAEFactory::GetEngine()
 
 bool CAEFactory::LoadEngine()
 {
-#if defined(TARGET_DVBBOX)
-  return true;
-#else
   /* can only load the engine once, XBMC restart is required to change it */
   if (AE)
     return false;
@@ -55,7 +52,6 @@ bool CAEFactory::LoadEngine()
   }
 
   return AE != NULL;
-#endif
 }
 
 void CAEFactory::UnLoadEngine()
@@ -70,9 +66,6 @@ void CAEFactory::UnLoadEngine()
 
 bool CAEFactory::StartEngine()
 {
-#if defined(TARGET_DVBBOX)
-  return true;
-#else
   if (!AE)
     return false;
 
@@ -82,7 +75,6 @@ bool CAEFactory::StartEngine()
   delete AE;
   AE = NULL;
   return false;
-#endif
 }
 
 bool CAEFactory::Suspend()
