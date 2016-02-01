@@ -555,7 +555,13 @@ bool CInputManager::OnKey(const CKey& key)
   {
     CLog::LogF(LOGDEBUG, "action %s [%d], switch to enigma2", action.GetName().c_str(), action.GetID());
     if (!system("kodiext -P $PPID -E"))
+    {
+      if (g_application.m_pPlayer->IsPlaying())
+      {
+          g_application.m_pPlayer->Pause();
+      }
       return true;
+    }
     else
       return false;
   }
